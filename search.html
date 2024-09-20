@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda de Productos - Mooto</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+</head>
+<body>
+    <header>
+        <div class="menu-hamburguesa">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="logo">
+            <img src="mooto.jpeg" alt="Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Protecciones</a></li>
+                <li><a href="#">Uniformes</a></li>
+                <li><a href="#">Entrenamiento</a></li>
+                <li><a href="search.html">Buscar</a></li> <!-- Nueva pestaña de búsqueda -->
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="Buscar">
+            <button type="submit">🔍</button>
+        </div>
+    </header>
+
+    <main>
+        <h1>Búsqueda de Productos</h1>
+        <table id="productos" class="display">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ASIANA PETO OFICIAL ROJO/AZUL</td>
+                    <td>Peto para combate. Doble vista AZUL Y ROJO.</td>
+                    <td>Protecciones</td>
+                    <td>€100</td>
+                </tr>
+                <tr>
+                    <td>UNIFORME ASIANA</td>
+                    <td>Uniforme oficial para competiciones.</td>
+                    <td>Uniformes</td>
+                    <td>€150</td>
+                </tr>
+                <tr>
+                    <td>GUANTES DE ENTRENAMIENTO</td>
+                    <td>Guantes de alta calidad para entrenamiento.</td>
+                    <td>Entrenamiento</td>
+                    <td>€30</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
+    <script src="scripts.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#productos').DataTable();
+        });
+    </script>
+</body>
+</html>
