@@ -80,3 +80,47 @@ function llenarTabla(productos) {
         $('#productosBody').append(fila);
     });
 }
+
+$(document).ready(function() {
+    // Inicializar DataTable para el carrito
+    var carritoTable = $('#carritoTabla').DataTable();
+
+    // Ejemplo de producto (se puede personalizar o conectar con datos reales)
+    var productos = [
+        { nombre: "ASIANA PETO OFICIAL ROJO/AZUL", cantidad: 1 }
+    ];
+
+    // Función para cargar productos en el carrito
+    function cargarCarrito() {
+        carritoTable.clear(); // Limpiar el carrito actual
+        productos.forEach(function(producto, index) {
+            // Agregar fila al carrito con un input para la cantidad
+            carritoTable.row.add([
+                producto.nombre,
+                `<input type="number" id="cantidadProducto${index}" value="${producto.cantidad}" class="cantidad-input" min="1">`
+            ]).draw();
+        });
+    }
+
+    // Mostrar la tabla del carrito cuando se haga clic en "Carrito"
+    $('#verCarrito').click(function() {
+        cargarCarrito(); // Cargar productos en el carrito
+        $('#tablaCarrito').toggle(); // Mostrar/Ocultar el carrito
+    });
+
+    // Manejar cambios en la cantidad del producto
+    $(document).on('change', '.cantidad-input', function() {
+        var inputId = $(this).attr('id'); // Obtener el ID del input
+        var nuevaCantidad = $(this).val(); // Obtener el valor del input usando val()
+        
+        // Actualizar la cantidad en el array de productos
+        var index = inputId.replace('cantidadProducto', ''); // Extraer el índice del ID
+        productos[index].cantidad = nuevaCantidad;
+
+        // Volver a cargar el carrito con la nueva cantidad
+        cargarCarrito();
+    });
+});
+
+
+
