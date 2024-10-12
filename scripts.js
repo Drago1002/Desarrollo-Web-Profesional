@@ -7,7 +7,13 @@ $(document).ready(function() {
                 { data: 'nombre' },
                 { data: 'descripcion' },
                 { data: 'categoria' },
-                { data: 'precio' }
+                { data: 'precio' },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return `<button class="agregar-carrito" data-nombre="${data.nombre}" data-precio="${data.precio}">Agregar al carrito</button>`;
+                    }
+                }
             ]
         });
     }
@@ -19,107 +25,156 @@ $(document).ready(function() {
             buscarProductos(query);
         }
     });
-});
 
-// Función para simular productos cargados dinámicamente (si no usas una API real)
-function obtenerProductos() {
-    return [
-        {
-            nombre: 'ASIANA PETO OFICIAL ROJO/AZUL',
-            descripcion: 'Peto para combate. Doble vista AZUL Y ROJO.',
-            categoria: 'Protecciones',
-            precio: '$600'
-        },
-        {
-            nombre: 'UNIFORME ASIANA',
-            descripcion: 'Uniforme oficial para competiciones.',
-            categoria: 'Uniformes',
-            precio: '$700'
-        },
-        {
-            nombre: 'GUANTES DE ENTRENAMIENTO',
-            descripcion: 'Guantes de alta calidad para entrenamiento.',
-            categoria: 'Entrenamiento',
-            precio: '$300'
-        }
-    ];
-}
-
-// Función para realizar la búsqueda de productos mediante una API
-function buscarProductos(query) {
-    // Simula una API o un endpoint que devuelva productos según la búsqueda
-    // Por ejemplo, puedes usar una API pública o interna para obtener los datos
-    let url = `https://api.example.com/products?search=${query}`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            // Llama a la función que llena la tabla con los datos obtenidos
-            llenarTabla(data);
-        })
-        .catch(error => {
-            console.error('Error al obtener los productos:', error);
-        });
-}
-
-// Función para llenar la tabla con los productos
-function llenarTabla(productos) {
-    // Limpia la tabla antes de llenarla
-    $('#productosBody').empty();
-
-    // Recorre cada producto y crea una fila en la tabla
-    productos.forEach(producto => {
-        let fila = `
-            <tr>
-                <td>${producto.nombre}</td>
-                <td>${producto.descripcion}</td>
-                <td>${producto.categoria}</td>
-                <td>${producto.precio}</td>
-            </tr>
-        `;
-        $('#productosBody').append(fila);
-    });
-}
-
-$(document).ready(function() {
     // Inicializar DataTable para el carrito
     var carritoTable = $('#carritoTabla').DataTable();
 
-    // Ejemplo de producto (se puede personalizar o conectar con datos reales)
-    var productos = [
-        { nombre: "ASIANA PETO OFICIAL ROJO/AZUL", cantidad: 1 }
-    ];
+    // Array para almacenar los productos del carrito
+    var productosCarrito = [];
+
+    // Variable para controlar el cupón de descuento
+    var descuento = 0;
+
+    // Función para simular productos cargados dinámicamente (si no usas una API real)
+    function obtenerProductos() {
+        return [
+            {
+                nombre: 'ASIANA PETO OFICIAL ROJO/AZUL',
+                descripcion: 'Peto para combate. Doble vista AZUL Y ROJO.',
+                categoria: 'Protecciones',
+                precio: 600
+            },
+            {
+                nombre: 'UNIFORME ASIANA',
+                descripcion: 'Uniforme oficial para competiciones.',
+                categoria: 'Uniformes',
+                precio: 700
+            },
+            {
+                nombre: 'GUANTES DE ENTRENAMIENTO',
+                descripcion: 'Guantes de alta calidad para entrenamiento.',
+                categoria: 'Entrenamiento',
+                precio: 300
+            }
+        ];
+    }
+
+    // Función para realizar la búsqueda de productos mediante una API
+    function buscarProductos(query) {
+        // Simula una API o un endpoint que devuelva productos según la búsqueda
+        let url = `https://api.example.com/products?search=${query}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // Llama a la función que llena la tabla con los datos obtenidos
+                llenarTabla(data);
+            })
+            .catch(error => {
+                console.error('Error al obtener los productos:', error);
+            });
+    }
+
+    // Función para llenar la tabla con los productos
+    function llenarTabla(productos) {
+        // Limpia la tabla antes de llenarla
+        $('#productosBody').empty();
+
+        // Recorre cada producto y crea una fila en la tabla
+        productos.forEach(producto => {
+            let fila = `
+                <tr>
+                    <td>${producto.nombre}</td>
+                    <td>${producto.descripcion}</td>
+                    <td>${producto.categoria}</td>
+                    <td>$${producto.precio}</td>
+                </tr>
+            `;
+            $('#productosBody').append(fila);
+        });
+    }
+
+    // Maneja el evento de agregar un producto al carrito
+    $(document).on('click', '.agregar-carrito', function() {
+        let nombre = $(this).data('nombre');
+        let precio = $(this).data('precio');
+        agregarAlCarrito(nombre, precio);
+    });
+
+    // Función para agregar un producto al carrito
+    function agregarAlCarrito(nombre, precio) {
+        let existe = productosCarrito.find(producto => producto.nombre === nombre);
+
+        if (existe) {
+            existe.cantidad++;
+        } else {
+            productosCarrito.push({ nombre, precio, cantidad: 1 });
+        }
+
+        cargarCarrito();
+    }
 
     // Función para cargar productos en el carrito
     function cargarCarrito() {
         carritoTable.clear(); // Limpiar el carrito actual
-        productos.forEach(function(producto, index) {
-            // Agregar fila al carrito con un input para la cantidad
+        var total = 0;
+        productosCarrito.forEach(function(producto, index) {
+            var subtotal = producto.precio * producto.cantidad;
+            total += subtotal;
             carritoTable.row.add([
                 producto.nombre,
-                `<input type="number" id="cantidadProducto${index}" value="${producto.cantidad}" class="cantidad-input" min="1">`
+                `<input type="number" id="cantidadProducto${index}" value="${producto.cantidad}" class="cantidad-input" min="1">`,
+                `$${subtotal.toFixed(2)}`,
+                `<button class="eliminar-producto" data-index="${index}">Eliminar</button>`
             ]).draw();
         });
+        $('#totalCarrito').text(total.toFixed(2)); // Actualiza el total
+        // Aplicar descuento al total
+        actualizarPrecioFinal(total);
     }
-
-    // Mostrar la tabla del carrito cuando se haga clic en "Carrito"
-    $('#verCarrito').click(function() {
-        cargarCarrito(); // Cargar productos en el carrito
-        $('#tablaCarrito').toggle(); // Mostrar/Ocultar el carrito
-    });
 
     // Manejar cambios en la cantidad del producto
     $(document).on('change', '.cantidad-input', function() {
         var inputId = $(this).attr('id'); // Obtener el ID del input
-        var nuevaCantidad = $(this).val(); // Obtener el valor del input usando val()
+        var nuevaCantidad = $(this).val(); // Obtener el valor del input
         
         // Actualizar la cantidad en el array de productos
         var index = inputId.replace('cantidadProducto', ''); // Extraer el índice del ID
-        productos[index].cantidad = nuevaCantidad;
+        productosCarrito[index].cantidad = nuevaCantidad;
 
         // Volver a cargar el carrito con la nueva cantidad
         cargarCarrito();
     });
+
+    // Eliminar producto del carrito
+    $(document).on('click', '.eliminar-producto', function() {
+        let index = $(this).data('index');
+        productosCarrito.splice(index, 1); // Eliminar producto
+        cargarCarrito(); // Volver a cargar el carrito
+    });
+
+    // Función para aplicar el cupón de descuento
+    $('#aplicar-cupon').on('click', function() {
+        var cupon = $('#cupon').val().trim();
+
+        if (cupon === 'TKD30') {
+            descuento = 0.30; // 30% de descuento
+            alert('Cupón aplicado correctamente. Se ha descontado el 30%.');
+        } else {
+            descuento = 0;
+            alert('Cupón no válido.');
+        }
+
+        // Actualizar el total en el carrito
+        var totalActual = parseFloat($('#totalCarrito').text());
+        actualizarPrecioFinal(totalActual);
+    });
+
+    // Función para actualizar el precio final con el descuento aplicado
+    function actualizarPrecioFinal(total) {
+        var precioConDescuento = total - (total * descuento);
+        $('#precio-final').text('Precio final: $' + precioConDescuento.toFixed(2));
+    }
 });
 
 
