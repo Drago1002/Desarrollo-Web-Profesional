@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Enlace a DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 <body>
     <header>
@@ -24,7 +23,7 @@
                 <li><a href="index.html">Uniformes</a></li>
                 <li><a href="index.html">Entrenamiento</a></li>
                 <li><a href="search.html">Buscar</a></li>
-                <li><a href="#">Carrito</a></li> <!-- Estamos en el carrito -->
+                <li><a href="#">Carrito</a></li>
             </ul>
         </nav>
     </header>
@@ -32,30 +31,50 @@
     <main>
         <h2>Carrito de Compras</h2>
         <div class="cart-container">
-            <div class="cart-item">
-                <img src="peto.jpg" alt="Peto Asiana">
-                <div class="cart-details">
-                    <p><strong>Peto 2 Vistas Oficial WTF Mooto</strong></p>
-                    <p>SKU: MTTPE2V001000</p>
-                    <p><strong>$1,299</strong></p>
-                </div>
-                <div class="cart-controls">
-                    <div class="control-group">
-                        <label for="cantidad">Cantidad</label>
-                        <input type="number" id="cantidad" value="1">
-                    </div>
-                    <div class="control-group">
-                        <label for="cupon">Cupón de descuento</label>
-                        <input type="text" id="cupon" placeholder="...">
-                    </div>
-                </div>
+            <table id="carritoTabla">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="peto.jpg" alt="Peto Asiana" style="width: 100px;"></td>
+                        <td>
+                            <strong>Peto 2 Vistas Oficial WTF Mooto</strong><br>
+                            SKU: MTTPE2V001000
+                        </td>
+                        <td>
+                            <input type="number" id="cantidadProducto" value="1" min="1" style="width: 50px;">
+                        </td>
+                        <td>$1,299</td>
+                        <td class="subtotal">$1,299</td>
+                        <td>
+                            <button class="eliminar-producto">Eliminar</button>
+                        </td>
+                    </tr>
+                    <!-- Puedes agregar más productos aquí -->
+                </tbody>
+            </table>
+            <div class="cart-controls">
+                <label for="cupon">Cupón de descuento</label>
+                <input type="text" id="cupon" placeholder="Ingresa tu cupón">
+                <button id="aplicar-cupon">Aplicar</button>
+            </div>
+            <div class="precio-final">
+                <p id="totalCarrito">Total: $1,299</p>
+                <p id="precio-final">Precio final: $1,299</p>
             </div>
         </div>
     </main>
 
-    <!-- Agregar jQuery y DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="scripts.js"></script>
 </body>
 </html>
