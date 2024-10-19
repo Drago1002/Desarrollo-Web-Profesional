@@ -34,6 +34,8 @@ $(document).ready(function() {
 
     // Variable para controlar el cupón de descuento
     var descuento = 0;
+    let precioOriginal = 1299;
+    let precioFinal = precioOriginal;
 
     // Función para simular productos cargados dinámicamente (si no usas una API real)
     function obtenerProductos() {
@@ -61,13 +63,11 @@ $(document).ready(function() {
 
     // Función para realizar la búsqueda de productos mediante una API
     function buscarProductos(query) {
-        // Simula una API o un endpoint que devuelva productos según la búsqueda
         let url = `https://api.example.com/products?search=${query}`;
 
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                // Llama a la función que llena la tabla con los datos obtenidos
                 llenarTabla(data);
             })
             .catch(error => {
@@ -77,10 +77,7 @@ $(document).ready(function() {
 
     // Función para llenar la tabla con los productos
     function llenarTabla(productos) {
-        // Limpia la tabla antes de llenarla
         $('#productosBody').empty();
-
-        // Recorre cada producto y crea una fila en la tabla
         productos.forEach(producto => {
             let fila = `
                 <tr>
@@ -116,7 +113,7 @@ $(document).ready(function() {
 
     // Función para cargar productos en el carrito
     function cargarCarrito() {
-        carritoTable.clear(); // Limpiar el carrito actual
+        carritoTable.clear();
         var total = 0;
         productosCarrito.forEach(function(producto, index) {
             var subtotal = producto.precio * producto.cantidad;
@@ -128,44 +125,41 @@ $(document).ready(function() {
                 `<button class="eliminar-producto" data-index="${index}">Eliminar</button>`
             ]).draw();
         });
-        $('#totalCarrito').text(total.toFixed(2)); // Actualiza el total
-        // Aplicar descuento al total
+        $('#totalCarrito').text(total.toFixed(2));
         actualizarPrecioFinal(total);
     }
 
     // Manejar cambios en la cantidad del producto
     $(document).on('change', '.cantidad-input', function() {
-        var inputId = $(this).attr('id'); // Obtener el ID del input
-        var nuevaCantidad = $(this).val(); // Obtener el valor del input
-        
-        // Actualizar la cantidad en el array de productos
-        var index = inputId.replace('cantidadProducto', ''); // Extraer el índice del ID
+        var inputId = $(this).attr('id');
+        var nuevaCantidad = $(this).val();
+        var index = inputId.replace('cantidadProducto', '');
         productosCarrito[index].cantidad = nuevaCantidad;
-
-        // Volver a cargar el carrito con la nueva cantidad
         cargarCarrito();
     });
 
     // Eliminar producto del carrito
     $(document).on('click', '.eliminar-producto', function() {
         let index = $(this).data('index');
-        productosCarrito.splice(index, 1); // Eliminar producto
-        cargarCarrito(); // Volver a cargar el carrito
+        productosCarrito.splice(index, 1);
+        cargarCarrito();
     });
 
     // Función para aplicar el cupón de descuento
     $('#aplicar-cupon').on('click', function() {
         var cupon = $('#cupon').val().trim();
-
         if (cupon === 'TKD30') {
-            descuento = 0.30; // 30% de descuento
-            alert('Cupón aplicado correctamente. Se ha descontado el 30%.');
+            descuento = 0.30;
+            alert('¡Se ha aplicado el cupón de descuento correctamente!\n30% de descuento.');
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
         } else {
             descuento = 0;
             alert('Cupón no válido.');
         }
-
-        // Actualizar el total en el carrito
         var totalActual = parseFloat($('#totalCarrito').text());
         actualizarPrecioFinal(totalActual);
     });
@@ -176,6 +170,40 @@ $(document).ready(function() {
         $('#precio-final').text('Precio final: $' + precioConDescuento.toFixed(2));
     }
 });
+
+$(document).ready(function() {
+    // Código existente...
+
+    // Evento para cambiar el modo oscuro
+    $('#toggle-dark-mode').on('click', function() {
+        $('body').toggleClass('dark-mode');
+        header.toggleClass('dark-mode');
+        nav.find('ul li a').toggleClass('dark-mode');
+        $('.cart-item').toggleClass('dark-mode');
+        $('.cart-total').toggleClass('dark-mode');
+        footer.toggleClass('dark-mode');
+    });
+});
+
+// Función para cambiar la imagen al hacer clic
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleccionamos todas las imágenes en la tabla de productos
+    const imagenes = document.querySelectorAll('#carritoTabla img');
+
+    // Iteramos sobre cada imagen y le agregamos un evento de clic
+    imagenes.forEach((imagen) => {
+        imagen.addEventListener('click', function() {
+            // Verificamos cuál es la imagen actual y la cambiamos
+            if (this.src.includes('basico.jpg')) {
+                this.src = 'patada.jpg';  // Cambia a la nueva imagen
+            } else {
+                this.src = 'basico.jpg';  // Cambia de nuevo a la imagen original si ya fue cambiada
+            }
+        });
+    });
+});
+
+
 
 
 
