@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras</title>
+    
+    <!-- Incluimos el archivo CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    
+    <!-- Incluimos la librería del confeti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
     <header>
@@ -52,7 +57,7 @@
                         <td>
                             <input type="number" id="cantidadProducto" value="1" min="1" style="width: 50px;">
                         </td>
-                        <td>$1,299</td>
+                        <td class="precio">$1,299</td>
                         <td class="subtotal">$1,299</td>
                         <td>
                             <button class="eliminar-producto">Eliminar</button>
@@ -65,6 +70,7 @@
                 <label for="cupon">Cupón de descuento</label>
                 <input type="text" id="cupon" placeholder="Ingresa tu cupón">
                 <button id="aplicar-cupon">Aplicar</button>
+                <button id="toggle-dark-mode">Cambiar a modo oscuro</button>
             </div>
             <div class="precio-final">
                 <p id="totalCarrito">Total: $1,299</p>
@@ -73,6 +79,21 @@
         </div>
     </main>
 
+    <footer>
+        <p>© Mooto, Todos los derechos reservados</p>
+        <ul>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Quiénes Somos</a></li>
+            <li><a href="#">Preguntas Frecuentes</a></li>
+            <li><a href="#">Contacto</a></li>
+        </ul>
+
+        <div class="footer-images">
+            <img src="basico.jpg" alt="Imagen Básica" style="width: 100px;" class="footer-imagen">
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="scripts.js"></script>
