@@ -279,3 +279,111 @@ footer .social-icons img {
     }
 }
 
+/* Contenedor de confeti */
+#confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Esto permite que el confeti no interfiera con las acciones del usuario */
+    z-index: 9999;
+}
+
+/* Estilo para cada trozo de confeti */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red; /* Puedes cambiar este color o usar múltiples colores para los confetis */
+    opacity: 0.8;
+    animation: fall 3s linear infinite;
+}
+
+/* Colores del confeti */
+.confetti:nth-child(2n) {
+    background-color: yellow;
+}
+
+.confetti:nth-child(3n) {
+    background-color: blue;
+}
+
+.confetti:nth-child(4n) {
+    background-color: green;
+}
+
+.confetti:nth-child(5n) {
+    background-color: purple;
+}
+
+/* Animación para que los confetis caigan */
+@keyframes fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Variación en la duración de la animación */
+.confetti:nth-child(2) {
+    animation-duration: 2.5s;
+}
+
+.confetti:nth-child(3) {
+    animation-duration: 3.5s;
+}
+
+.confetti:nth-child(4) {
+    animation-duration: 4s;
+}
+
+/* Variación en la velocidad y dirección de caída */
+.confetti:nth-child(odd) {
+    animation-timing-function: ease-out;
+}
+
+.confetti:nth-child(even) {
+    animation-timing-function: ease-in;
+}
+
+/* Estilos para el modo oscuro */
+body.dark-mode {
+    background-color: #333;
+    color: white;
+}
+
+header.dark-mode {
+    background-color: #444;
+    border-bottom: 1px solid #555;
+}
+
+nav ul li a.dark-mode {
+    background-color: #555;
+    color: white;
+}
+
+nav ul li a.dark-mode:hover {
+    background-color: #666;
+}
+
+.cart-item.dark-mode {
+    background-color: #444;
+    border: 1px solid #555;
+}
+
+.cart-total.dark-mode {
+    background-color: #444;
+    border: 1px solid #555;
+}
+
+footer.dark-mode {
+    background-color: #444;
+}
+
+
+
